@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::apiResource('/roles', 'RoleController')->middleware('auth:api');
+
+Route::apiResource('/interactions', 'InteractionController')->middleware('auth:api');
+
+Route::middleware('auth:api')->prefix('access')->group(function () {
+    Route::post('/assign-role', 'AccessController@assignRole')->name('assign.role');
+    Route::post('/assign-permission', 'AccessController@assignPermission')->name('assign.permission');
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
