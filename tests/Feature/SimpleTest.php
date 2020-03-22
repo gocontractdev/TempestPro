@@ -90,6 +90,54 @@ class SimpleTest extends TestCase
         ]);
     }
 
+    public function testBulkAssignPermission()
+    {
+        $monitorId =  rand(1, 100);
+        $testUser = factory(User::class)->create(['id' => $monitorId,]);
+        $roles = factory(Role::class, 5)->create();
+        $permissions =  factory(Permission::class, 2)->create();
+        // test 1
+        $data = [
+            $permissions[0]->key => [$roles[2]->id,],
+        ];
+        $response = $this->actingAs($testUser, self::DRIVER)
+            ->withoutExceptionHandling()
+            ->put(self::API_ROUTE . '/roles/' . $roles[1]->id . '/assign',  $data);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonStructure([
+            'status',
+            'data' => [
+                'success_count',
+                'failure_count',
+            ]
+        ]);
+        $response->assertJsonFragment([
+            'success_count' => 1,
+            'failure_count' => 0,
+        ]);
+
+        // test 2
+        $data = [
+            $permissions[0]->key => [$roles[1]->id, $roles[2]->id, $roles[4]->id],
+            $permissions[1]->key => [$roles[4]->id, $roles[3]->id, $roles[0]->id],
+        ];
+        $response = $this->actingAs($testUser, self::DRIVER)
+            ->withoutExceptionHandling()
+            ->put(self::API_ROUTE . '/roles/' . $roles[3]->id . '/assign',  $data);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonStructure([
+            'status',
+            'data' => [
+                'success_count',
+                'failure_count',
+            ]
+        ]);
+        $response->assertJsonFragment([
+            'success_count' => 5,
+            'failure_count' => 1,
+        ]);
+    }
+
     public function testAssignPermissionSamePermissionFailure()
     {
         $monitorId =  rand(1, 100);
