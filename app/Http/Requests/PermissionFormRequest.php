@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Permission;
 use HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,12 +29,7 @@ class PermissionFormRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'source_role_id' => 'required',
-            'target_role_id' => 'required',
-            '*_role_id' => 'distinct|exists:App\Role,id',
-            'permission_key' => 'required',
-        ];
+        return Permission::$rules;
     }
 
     protected function failedValidation(Validator $validator)

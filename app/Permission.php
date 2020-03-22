@@ -11,4 +11,11 @@ class Permission extends Model
     protected $fillable = [
         'key',
     ];
+
+    public static $rules = [
+        'source_role_id' => 'required',
+        'target_role_id' => 'required',
+        '*_role_id' => 'distinct|exists:App\Role,id',
+        'permission_key' => 'required',
+    ];
 }

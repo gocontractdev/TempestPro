@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('/roles', 'RoleController')->middleware('auth:api');
-
+Route::middleware('auth:api')->prefix('roles')->group(function () {
+    Route::apiResource('', 'RoleController');
+    Route::put('/{role}/assign', 'RoleController@assignInteractions');
+});
 Route::apiResource('/interactions', 'PermissionController')->middleware('auth:api');
 
 Route::middleware('auth:api')->prefix('access')->group(function () {
