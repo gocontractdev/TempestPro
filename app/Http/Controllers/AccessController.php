@@ -2,27 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Role;
+use App\Http\Requests\PermissionFormRequest;
+use App\Http\Requests\RoleFormRequest;
+use App\Interaction;
+use App\Permission;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+
 
 class AccessController extends Controller
 {
-
-    public function assignRole(Request $request)
+    public function assignPermission(PermissionFormRequest $request)
     {
-        $response = new JsonResponse();
-
-
-        return $response;
+        $permission = Permission::firstOrCreate(
+            ['key' => $request->get('permission_key'),],
+            ['key' => $request->get('permission_key'),]
+        );
+        $data = [
+            'permission_id' => $permission->id,
+            'source_role_id' => $request->get('source_role_id'),
+            'target_role_id' => $request->get('target_role_id'),
+        ];
+        $newInteraction = Interaction::firstOrCreate($data, $data);
+        return new JsonResponse([
+            'status' => true,
+            'data' => $newInteraction,
+        ]);
     }
 
-    public function assignPermission(Request $request)
+    public function assignRole(RoleFormRequest $request)
     {
-        $response = new JsonResponse();
-
-
-        return $response;
+        $data = $request->all();
+        // todo : use laravel-permission
+        // OR use model
+        // OR plain query DB::table('role_user')->insert($data);
+        return new JsonResponse([
+            'status' => true,
+        ]);
     }
+
 }

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('/roles', 'RoleController')->middleware('auth:api');
 
-Route::apiResource('/interactions', 'InteractionController')->middleware('auth:api');
+Route::apiResource('/interactions', 'PermissionController')->middleware('auth:api');
 
 Route::middleware('auth:api')->prefix('access')->group(function () {
     Route::post('/assign-role', 'AccessController@assignRole')->name('assign.role');

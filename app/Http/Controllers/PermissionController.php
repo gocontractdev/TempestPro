@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Interaction;
+use App\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class InteractionController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return void
      */
     public function index()
     {
-        //todo: later
+        //
     }
 
     /**
@@ -26,40 +26,40 @@ class InteractionController extends Controller
      */
     public function store(Request $request)
     {
-        //todo: later
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Interaction  $interaction
+     * @param  \App\Permission  $permission
      * @return Response
      */
-    public function show(Interaction $interaction)
+    public function show(Permission $permission)
     {
-        //todo: later
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  \App\Interaction  $interaction
+     * @param  \App\Permission  $permission
      * @return Response
      */
-    public function update(Request $request, Interaction $interaction)
+    public function update(Request $request, Permission $permission)
     {
-        //todo: later
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Interaction  $interaction
+     * @param  \App\Permission  $permission
      * @return Response
      */
-    public function destroy(Interaction $interaction)
+    public function destroy(Permission $permission)
     {
-        //todo: later
+        //
     }
 }

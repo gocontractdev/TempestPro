@@ -18,4 +18,14 @@ class Role extends Model
     {
         return $this->belongsToMany('App\User');
     }
+
+    public function sources()
+    {
+        return $this->belongsToMany('App\Roles', 'Interaction', 'target_role_id');
+    }
+
+    public function targets()
+    {
+        return $this->belongsToMany('App\Roles', 'Interaction', 'source_role_id');
+    }
 }
