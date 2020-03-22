@@ -21,11 +21,16 @@ class Role extends Model
 
     public function sources()
     {
-        return $this->belongsToMany('App\Roles', 'Interaction', 'target_role_id');
+        return $this->belongsToMany('App\Role', 'Interactions', 'target_role_id', 'source_role_id');
     }
 
     public function targets()
     {
-        return $this->belongsToMany('App\Roles', 'Interaction', 'source_role_id');
+        return $this->belongsToMany('App\Role', 'Interactions', 'source_role_id', 'target_role_id');
+    }
+
+    public function interactions()
+    {
+        return $this->hasMany('App\Interaction', 'source_role_id');
     }
 }

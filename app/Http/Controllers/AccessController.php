@@ -6,7 +6,9 @@ use App\Http\Requests\PermissionFormRequest;
 use App\Http\Requests\RoleFormRequest;
 use App\Interaction;
 use App\Permission;
+use App\Role;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 
 
 class AccessController extends Controller
@@ -31,6 +33,17 @@ class AccessController extends Controller
 
     public function assignRole(RoleFormRequest $request)
     {
+        /*$role = Role::find(2);
+        $interactions = $role->interactions;
+        $interactionList = new Collection();
+        foreach ($interactions as $interaction) {
+            $interactionList->add([
+                'permission_id' => $interaction->permission_id,
+                'target_role_id' => $interaction->target_role_id,
+            ]);
+        }
+        dump($interactionList);*/
+
         $data = $request->all();
         // todo : use laravel-permission
         // OR use model

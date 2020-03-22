@@ -115,6 +115,9 @@ class SimpleTest extends TestCase
         ]);
     }
 
+    /**
+     * @test test if the repeating same combination fails or returns previously created interaction model
+     */
     public function testAssignPermissionDuplication()
     {
         $monitorId =  rand(1, 100);
