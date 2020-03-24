@@ -4,15 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PermissionFormRequest;
 use App\Http\Requests\RoleFormRequest;
+use App\Http\Requests\TestFormRequest;
 use App\Interaction;
 use App\Permission;
 use App\Role;
+use App\User;
+use Illuminate\Support\Facades\DB;
+use App\Helpers\PermissionHelper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 
 
 class AccessController extends Controller
 {
+    public function testPermission(TestFormRequest $request)
+    {;
+        $data = $request->all();
+        $user = $request->user();
+        $permission = Permission::where('key', $data['key'])->firstOrFail();
+        $targetUser = User::find($data['user_id']);
+
+        $check = (new PermissionHelper($user))->can($targetUser, $permission);
+
+        return new JsonResponse([
+            'status' => true,
+            'data' => [
+                'check' => $check,
+            ],
+        ]);
+    }
+
     public function assignPermission(PermissionFormRequest $request)
     {
         $permission = Permission::firstOrCreate(
@@ -33,23 +54,14 @@ class AccessController extends Controller
 
     public function assignRole(RoleFormRequest $request)
     {
-        /*$role = Role::find(2);
-        $interactions = $role->interactions;
-        $interactionList = new Collection();
-        foreach ($interactions as $interaction) {
-            $interactionList->add([
-                'permission_id' => $interaction->permission_id,
-                'target_role_id' => $interaction->target_role_id,
-            ]);
-        }
-        dump($interactionList);*/
-
         $data = $request->all();
-        // todo : use laravel-permission
-        // OR use model
-        // OR plain query DB::table('role_user')->insert($data);
+        $user = User::find($data['user_id']);
+        $user->role_id = $data['role_id'];
+        $user->save();
+
         return new JsonResponse([
             'status' => true,
+            'data' => $user,
         ]);
     }
 

@@ -23,6 +23,7 @@ Route::apiResource('/interactions', 'PermissionController')->middleware('auth:ap
 Route::middleware('auth:api')->prefix('access')->group(function () {
     Route::post('/assign-role', 'AccessController@assignRole')->name('assign.role');
     Route::post('/assign-permission', 'AccessController@assignPermission')->name('assign.permission');
+    Route::post('/assign-test', 'AccessController@testPermission')->name('assign.test');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

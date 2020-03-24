@@ -39,6 +39,11 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->hasOne('App\Roles');
+        return $this->belongsTo('App\Role');
+    }
+
+    public function isSame(User $user) : bool
+    {
+        return $this->id == $user->id;
     }
 }

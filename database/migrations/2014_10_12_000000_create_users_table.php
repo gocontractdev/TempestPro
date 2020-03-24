@@ -24,6 +24,10 @@ class CreateUsersTable extends Migration
                 ->unique()
                 ->nullable()
                 ->default(null);
+            $table->integer('role_id')->nullable();
+            $table->foreign('role_id')
+                ->references('id')
+                ->on('roles');
             $table->rememberToken();
             $table->timestamps();
         });
