@@ -15,10 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->prefix('roles')->group(function () {
-    Route::apiResource('', 'RoleController');
-    Route::put('/{role}/assign', 'RoleController@assignInteractions');
+    Route::apiResource('', 'RoleController')->names('roles');
+    Route::put('/{role}/assign', 'RoleController@assignInteractions')->name('roles.bulk');
 });
-Route::apiResource('/interactions', 'PermissionController')->middleware('auth:api');
 
 Route::middleware('auth:api')->prefix('access')->group(function () {
     Route::post('/assign-role', 'AccessController@assignRole')->name('assign.role');

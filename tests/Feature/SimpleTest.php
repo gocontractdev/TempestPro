@@ -7,7 +7,6 @@ use App\Role;
 use App\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
@@ -23,7 +22,7 @@ class SimpleTest extends TestCase
     {
         $testUser = factory(User::class)->create([]);
         $response = $this->actingAs($testUser, self::DRIVER)
-            ->get( self::API_ROUTE . '/roles');
+            ->get( route('roles.index'));
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonCount(3);
@@ -42,7 +41,7 @@ class SimpleTest extends TestCase
         ];
 
         $response = $this->actingAs($testUser, self::DRIVER)
-            ->post(self::API_ROUTE . '/roles',  $data);
+            ->post(route('roles.store'),  $data);
 
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonStructure([
@@ -72,7 +71,7 @@ class SimpleTest extends TestCase
             'permission_key' => $permission->key,
         ];
         $response = $this->actingAs($testUser, self::DRIVER)
-            ->post(self::API_ROUTE . '/access/assign-permission',  $data);
+            ->post(route('assign.permission'),  $data);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
@@ -101,8 +100,8 @@ class SimpleTest extends TestCase
             $permissions[0]->key => [$roles[2]->id,],
         ];
         $response = $this->actingAs($testUser, self::DRIVER)
-            ->withoutExceptionHandling()
-            ->put(self::API_ROUTE . '/roles/' . $roles[1]->id . '/assign',  $data);
+            ->put(route('roles.bulk', ['role' => $roles[1]->id,]),  $data);
+            //->put(self::API_ROUTE . '/roles/' . $roles[1]->id . '/assign',  $data);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'status',
@@ -121,9 +120,10 @@ class SimpleTest extends TestCase
             $permissions[0]->key => [$roles[1]->id, $roles[2]->id, $roles[4]->id],
             $permissions[1]->key => [$roles[4]->id, $roles[3]->id, $roles[0]->id],
         ];
+
         $response = $this->actingAs($testUser, self::DRIVER)
             ->withoutExceptionHandling()
-            ->put(self::API_ROUTE . '/roles/' . $roles[3]->id . '/assign',  $data);
+            ->put(route('roles.bulk', ['role' => $roles[1]->id,]),  $data);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'status',
@@ -151,7 +151,7 @@ class SimpleTest extends TestCase
             'permission_key' => $permission->key,
         ];
         $response = $this->actingAs($testUser, self::DRIVER)
-            ->post(self::API_ROUTE . '/access/assign-permission',  $data);
+            ->post(route('assign.permission'),  $data);
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $response->assertJsonStructure([
@@ -178,9 +178,9 @@ class SimpleTest extends TestCase
             'permission_key' => $permission->key,
         ];
         $response = $this->actingAs($testUser, self::DRIVER)
-            ->post(self::API_ROUTE . '/access/assign-permission',  $data);
+            ->post(route('assign.permission'),  $data);
         $response->assertStatus(Response::HTTP_OK);
         $response = $this->actingAs($testUser, self::DRIVER)
-            ->post(self::API_ROUTE . '/access/assign-permission',  $data);
+            ->post(route('assign.permission'),  $data);
         $response->assertStatus(Response::HTTP_OK);}
 }
